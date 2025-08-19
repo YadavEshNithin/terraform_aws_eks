@@ -1,50 +1,44 @@
 pipeline {
-    agent  {
-        label 'AGENT-1'
+    agent {
+        label "AGENT-1"
     }
-    environment { 
-        appVersion = ''
-        REGION = "us-east-1"
-        ACC_ID = "315069654700"
-        PROJECT = "roboshop"
+    environment {
+        // COURSE = "JENKINS"
+        appVersion = ""
+        REGION="us-east-1"
+        ACC_ID="010666226306"
+        PROJECT="roboshop"
     }
     options {
         timeout(time: 30, unit: 'MINUTES') 
         disableConcurrentBuilds()
-        ansiColor('xterm')
     }
-    /* parameters {
-        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password') 
-    } */
-    // Build
+    // parameters {
+    //     // string(name: 'PERSON', defaultValue: 'Mr Jenkins NEW', description: 'Who should I say hello to?')
+    //     // text(name: 'BIOGRAPHY', defaultValue: 'JB', description: 'Enter some information about the person')
+    //     // booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+    //     // choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+    //     // password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password') 
+    // }
     stages {
         stage('init') {
             steps {
-                script {
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1') {
-                        sh """
-                            cd 00-vpc
-                            terraform init -reconfigure
-                        """
-                    }
-                }
+                 withAWS(credentials: 'aws-credds', region: 'us-east-1') {
+                 sh """
+                    cd 00-vpc
+                    terraform init -reconfigure
+                 """
+            }
             }
         }
-
         stage('plan') {
             steps {
-                script {
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1') {
-                        sh """
-                            cd 00-vpc
-                            terraform plan
-                        """
-                    }
-                }
+                 withAWS(credentials: 'aws-credds', region: 'us-east-1') {
+                 sh """
+                    cd 00-vpc
+                    terraform plan
+                 """
+            }
             }
         }
         stage('apply') {
@@ -54,17 +48,14 @@ pipeline {
                 submitter "alice,bob"
             }
             steps {
-                script {
-                    withAWS(credentials: 'aws-creds', region: 'us-east-1') {
-                        sh """
-                            cd 00-vpc
-                            terraform apply -auto-approve
-                        """
-                    }
+                 withAWS(credentials: 'aws-credds', region: 'us-east-1') {
+                 sh """
+                    cd 00-vpc
+                    terraform apply -auto-approve
+                 """
                 }
             }
         }
-        // Down stream job
         stage('Trigger SG') {
             steps {
                 script {
@@ -74,19 +65,34 @@ pipeline {
                 }
             }
         }
-        
+       
+        stage('Deploy') {
+            // input {
+            //     message "Should we continue?"
+            //     ok "Yes, we should."
+            //     submitter "alice,bob"
+            //     parameters {
+            //         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+            //     }
+            // }
+            steps {
+                echo 'Deploying....'
+                // echo "Hello, ${PERSON}, nice to meet you."
+            }
+        }
     }
 
-    post { 
-        always { 
-            echo 'I will always say Hello again!'
+
+    post {
+        always {
+            echo " always hello"
             deleteDir()
         }
-        success { 
-            echo 'Hello Success'
+        success {
+            echo " success hello"
         }
-        failure { 
-            echo 'Hello Failure'
+        failure {
+            echo " failure hello"
         }
     }
 }
