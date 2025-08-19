@@ -6,10 +6,14 @@ variable "environment" {
     default = "dev"
 }
 
-variable "zone_id" {
-    default = "Z032558618100M4EJX8X4"
+variable "zone_name" {
+  type        = string
+  default     = "rshopdaws84s.site"
+  description = "description"
 }
 
-variable "zone_name" {
-    default = "daws84s.site"
+variable "zone_id" {
+  type        = string
+  default     = "Z009301219WUFZE0J0EH9"
+  description = "description"
 }
