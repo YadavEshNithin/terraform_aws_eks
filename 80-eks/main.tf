@@ -48,6 +48,7 @@ module "eks" {
     #     AmazonEFS = "arn:aws:iam::aws:policy/service-role/AmazonEFSCSIDriverPolicy"
     #     AmazonEKSLoad = "arn:aws:iam::aws:policy/AmazonEKSLoadBalancingPolicy"
     # }
+    ###( here uncommenting own )
     green = {
       # Starting on 1.30, AL2023 is the default AMI type for EKS managed node groups
       ami_type       = "AL2023_x86_64_STANDARD" # user name is ec2-user
@@ -71,6 +72,7 @@ module "eks" {
         }
       } */
     }
+    ### (up to here)
   }
 
   tags = merge(
